@@ -1,0 +1,470 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Netflix Clone</title>
+    <style>
+        /* Reset and Basic Styles */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+            background-color: #141414;
+            color: #fff;
+            overflow-x: hidden;
+        }
+
+        /* Color Scheme */
+        :root {
+            --primary-color: #141414;
+            --secondary-color: #E50914;
+            --accent-color: #B3B3B3;
+            --text-color: #fff;
+            --highlight-color: #FF0000;
+        }
+
+        /* Utility Classes */
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        /* Header and Navigation */
+        header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            background-color: rgba(20, 20, 20, 0.8);
+            padding: 20px 0;
+            z-index: 1000;
+            transition: background-color 0.3s ease;
+        }
+
+        nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: var(--secondary-color);
+        }
+
+        .nav-links {
+            list-style: none;
+            display: flex;
+        }
+
+        .nav-links li {
+            margin-left: 20px;
+        }
+
+        .nav-links a {
+            color: var(--accent-color);
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+
+        .nav-links a:hover {
+            color: var(--text-color);
+        }
+
+        /* Search Bar */
+        .search-bar {
+            position: relative;
+            display: flex;
+            align-items: center;
+        }
+
+        .search-input {
+            background-color: transparent;
+            border: 1px solid var(--accent-color);
+            color: var(--text-color);
+            padding: 8px 30px 8px 10px;
+            border-radius: 4px;
+            transition: border-color 0.3s ease;
+        }
+
+        .search-input:focus {
+            border-color: var(--text-color);
+            outline: none;
+        }
+
+        .search-icon {
+            position: absolute;
+            right: 10px;
+            color: var(--accent-color);
+            cursor: pointer;
+        }
+
+        /* Hero Section */
+        .hero {
+            position: relative;
+            height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+        }
+
+        .hero-bg {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            filter: brightness(50%);
+            z-index: -1;
+        }
+
+        .hero-content {
+            text-align: center;
+            z-index: 1;
+        }
+
+        .hero-title {
+            font-size: 3rem;
+            font-weight: bold;
+            margin-bottom: 20px;
+            color: var(--text-color);
+        }
+
+        .hero-subtitle {
+            font-size: 1.5rem;
+            margin-bottom: 30px;
+            color: var(--accent-color);
+        }
+
+        .hero-btn {
+            background-color: var(--secondary-color);
+            color: var(--text-color);
+            padding: 10px 20px;
+            border: none;
+            border-radius: 4px;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        .hero-btn:hover {
+            background-color: var(--highlight-color);
+        }
+
+        /* Content Carousels */
+        .carousel-section {
+            margin-top: 20px;
+        }
+
+        .carousel-title {
+            font-size: 1.5rem;
+            font-weight: bold;
+            margin-bottom: 10px;
+            color: var(--text-color);
+            padding-left: 20px;
+        }
+
+        .carousel {
+            display: flex;
+            overflow-x: scroll;
+            padding: 10px 0;
+            scroll-behavior: smooth;
+        }
+
+        .carousel::-webkit-scrollbar {
+            display: none;
+        }
+
+        .carousel-item {
+            flex: 0 0 auto;
+            width: 200px;
+            height: 300px;
+            margin-right: 10px;
+            border-radius: 4px;
+            overflow: hidden;
+            position: relative;
+            transition: transform 0.3s ease;
+        }
+
+        .carousel-item:hover {
+            transform: scale(1.1);
+            z-index: 2;
+        }
+
+        .carousel-item img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
+        }
+
+        /* Footer */
+        footer {
+            background-color: rgba(20, 20, 20, 0.8);
+            padding: 20px 0;
+            text-align: center;
+            margin-top: 50px;
+        }
+
+        .footer-links {
+            list-style: none;
+            display: flex;
+            justify-content: center;
+            margin-bottom: 10px;
+        }
+
+        .footer-links li {
+            margin: 0 10px;
+        }
+
+        .footer-links a {
+            color: var(--accent-color);
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+
+        .footer-links a:hover {
+            color: var(--text-color);
+        }
+
+        .footer-text {
+            color: var(--accent-color);
+            font-size: 0.8rem;
+        }
+
+        /* Modal */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.8);
+            z-index: 2000;
+            overflow: auto;
+        }
+
+        .modal-content {
+            position: relative;
+            width: 80%;
+            max-width: 800px;
+            margin: 50px auto;
+            background-color: #222;
+            border-radius: 8px;
+            padding: 20px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5);
+        }
+
+        .modal-close {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            font-size: 1.5rem;
+            color: var(--text-color);
+            cursor: pointer;
+        }
+
+        .modal-title {
+            font-size: 2rem;
+            font-weight: bold;
+            margin-bottom: 10px;
+            color: var(--text-color);
+        }
+
+        .modal-description {
+            font-size: 1rem;
+            margin-bottom: 20px;
+            color: var(--accent-color);
+        }
+
+        .modal-image {
+            width: 100%;
+            max-height: 400px;
+            object-fit: cover;
+            border-radius: 4px;
+            margin-bottom: 20px;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .nav-links {
+                display: none;
+                flex-direction: column;
+                position: absolute;
+                top: 60px;
+                left: 0;
+                width: 100%;
+                background-color: rgba(20, 20, 20, 0.9);
+                text-align: center;
+            }
+
+            .nav-links.active {
+                display: flex;
+            }
+
+            .nav-links li {
+                margin: 10px 0;
+            }
+
+            .hamburger {
+                display: block;
+                cursor: pointer;
+                color: var(--accent-color);
+                font-size: 1.5rem;
+            }
+
+            .hero-title {
+                font-size: 2rem;
+            }
+
+            .hero-subtitle {
+                font-size: 1.2rem;
+            }
+
+            .carousel-item {
+                width: 150px;
+                height: 225px;
+            }
+        }
+
+        /* Hamburger Menu Icon */
+        .hamburger {
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="container">
+            <nav>
+                <div class="logo">NETFLIX</div>
+                <ul class="nav-links">
+                    <li><a href="#">Home</a></li>
+                    <li><a href="#">TV Shows</a></li>
+                    <li><a href="#">Movies</a></li>
+                    <li><a href="#">New & Popular</a></li>
+                    <li><a href="#">My List</a></li>
+                </ul>
+                <div class="search-bar">
+                    <input type="text" class="search-input" placeholder="Search">
+                    <span class="search-icon">&#128269;</span>
+                </div>
+                <div class="hamburger">&#9776;</div>
+            </nav>
+        </div>
+    </header>
+
+    <section class="hero">
+        <img src="https://picsum.photos/id/10/1920/1080" alt="Hero Background" class="hero-bg">
+        <div class="hero-content">
+            <h1 class="hero-title">Unlimited movies, TV shows, and more.</h1>
+            <p class="hero-subtitle">Watch anywhere. Cancel anytime.</p>
+            <button class="hero-btn">JOIN NOW</button>
+        </div>
+    </section>
+
+    <section class="carousel-section">
+        <h2 class="carousel-title">Trending Now</h2>
+        <div class="carousel">
+            <div class="carousel-item" onclick="showModal('Movie 1', 'Description of Movie 1', 'https://picsum.photos/id/20/200/300')">
+                <img src="https://picsum.photos/id/20/200/300" alt="Movie 1">
+            </div>
+            <div class="carousel-item" onclick="showModal('Movie 2', 'Description of Movie 2', 'https://picsum.photos/id/21/200/300')">
+                <img src="https://picsum.photos/id/21/200/300" alt="Movie 2">
+            </div>
+            <div class="carousel-item" onclick="showModal('Movie 3', 'Description of Movie 3', 'https://picsum.photos/id/22/200/300')">
+                <img src="https://picsum.photos/id/22/200/300" alt="Movie 3">
+            </div>
+            <div class="carousel-item" onclick="showModal('Movie 4', 'Description of Movie 4', 'https://picsum.photos/id/23/200/300')">
+                <img src="https://picsum.photos/id/23/200/300" alt="Movie 4">
+            </div>
+            <div class="carousel-item" onclick="showModal('Movie 5', 'Description of Movie 5', 'https://picsum.photos/id/24/200/300')">
+                <img src="https://picsum.photos/id/24/200/300" alt="Movie 5">
+            </div>
+        </div>
+    </section>
+
+    <section class="carousel-section">
+        <h2 class="carousel-title">Popular on Netflix</h2>
+        <div class="carousel">
+            <div class="carousel-item" onclick="showModal('Show 1', 'Description of Show 1', 'https://picsum.photos/id/30/200/300')">
+                <img src="https://picsum.photos/id/30/200/300" alt="Show 1">
+            </div>
+            <div class="carousel-item" onclick="showModal('Show 2', 'Description of Show 2', 'https://picsum.photos/id/31/200/300')">
+                <img src="https://picsum.photos/id/31/200/300" alt="Show 2">
+            </div>
+            <div class="carousel-item" onclick="showModal('Show 3', 'Description of Show 3', 'https://picsum.photos/id/32/200/300')">
+                <img src="https://picsum.photos/id/32/200/300" alt="Show 3">
+            </div>
+            <div class="carousel-item" onclick="showModal('Show 4', 'Description of Show 4', 'https://picsum.photos/id/33/200/300')">
+                <img src="https://picsum.photos/id/33/200/300" alt="Show 4">
+            </div>
+            <div class="carousel-item" onclick="showModal('Show 5', 'Description of Show 5', 'https://picsum.photos/id/34/200/300')">
+                <img src="https://picsum.photos/id/34/200/300" alt="Show 5">
+            </div>
+        </div>
+    </section>
+
+    <div id="myModal" class="modal">
+        <div class="modal-content">
+            <span class="modal-close" onclick="closeModal()">&times;</span>
+            <img id="modalImage" class="modal-image" src="" alt="Modal Image">
+            <h2 id="modalTitle" class="modal-title"></h2>
+            <p id="modalDescription" class="modal-description"></p>
+        </div>
+    </div>
+
+    <footer>
+        <div class="container">
+            <ul class="footer-links">
+                <li><a href="#">FAQ</a></li>
+                <li><a href="#">Help Center</a></li>
+                <li><a href="#">Account</a></li>
+                <li><a href="#">Media Center</a></li>
+                <li><a href="#">Investor Relations</a></li>
+            </ul>
+            <p class="footer-text">&copy; 2024 Netflix Clone</p>
+        </div>
+    </footer>
+
+    <script>
+        // Hamburger Menu Toggle
+        const hamburger = document.querySelector('.hamburger');
+        const navLinks = document.querySelector('.nav-links');
+
+        hamburger.addEventListener('click', () => {
+            navLinks.classList.toggle('active');
+        });
+
+        // Modal Functions
+        function showModal(title, description, imageUrl) {
+            document.getElementById('modalTitle').textContent = title;
+            document.getElementById('modalDescription').textContent = description;
+            document.getElementById('modalImage').src = imageUrl;
+            document.getElementById('myModal').style.display = 'block';
+        }
+
+        function closeModal() {
+            document.getElementById('myModal').style.display = 'none';
+        }
+
+        // Close modal if clicked outside the content
+        window.onclick = function(event) {
+            if (event.target == document.getElementById('myModal')) {
+                closeModal();
+            }
+        }
+    </script>
+</body>
+</html>
